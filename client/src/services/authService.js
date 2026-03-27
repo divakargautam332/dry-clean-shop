@@ -16,12 +16,15 @@ const getStoredUser = () => {
 
 // Set token and user in storage
 const setAuthData = (token, user) => {
+    console.log('💾 Saving token:', token ? token.substring(0, 30) + '...' : 'null');
+    console.log('💾 Saving user:', user);
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
 };
 
 // Clear auth data from storage
 const clearAuthData = () => {
+    console.log('🗑️ Clearing auth data');
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
 };
@@ -30,7 +33,10 @@ const clearAuthData = () => {
 const register = async (userData) => {
     try {
         const response = await api.post('/auth/register', userData);
-        const { token, data: user } = response.data;
+        console.log('📥 Register response:', response.data);
+
+        // ✅ FIX: Response structure is { success, data: { token, ...user } }
+        const { token, ...user } = response.data.data;
 
         if (token && user) {
             setAuthData(token, user);
@@ -38,6 +44,7 @@ const register = async (userData) => {
 
         return { success: true, data: user };
     } catch (error) {
+        console.error('❌ Register error:', error);
         return {
             success: false,
             message: error.response?.data?.message || 'Registration failed'
@@ -49,14 +56,23 @@ const register = async (userData) => {
 const login = async (email, password) => {
     try {
         const response = await api.post('/auth/login', { email, password });
-        const { token, data: user } = response.data;
+        console.log('📥 Login response:', response.data);
+
+        // ✅ FIX: Response structure is { success, data: { token, ...user } }
+        const { token, ...user } = response.data.data;
+
+        console.log('🔑 Extracted token:', token ? token.substring(0, 30) + '...' : 'null');
+        console.log('👤 Extracted user:', user);
 
         if (token && user) {
             setAuthData(token, user);
+            return { success: true, data: user };
+        } else {
+            console.log('❌ No token or user in response');
+            return { success: false, message: 'No token received' };
         }
-
-        return { success: true, data: user };
     } catch (error) {
+        console.error('❌ Login error:', error);
         return {
             success: false,
             message: error.response?.data?.message || 'Login failed'
@@ -135,7 +151,6 @@ const addAddress = async (address) => {
         const response = await api.post('/auth/address', address);
         const { data: addresses } = response.data;
 
-        // Update stored user with new addresses
         const currentUser = getStoredUser();
         if (currentUser) {
             setAuthData(getToken(), { ...currentUser, addresses });
@@ -156,7 +171,6 @@ const updateAddress = async (addressId, address) => {
         const response = await api.put(`/auth/address/${addressId}`, address);
         const { data: addresses } = response.data;
 
-        // Update stored user with updated addresses
         const currentUser = getStoredUser();
         if (currentUser) {
             setAuthData(getToken(), { ...currentUser, addresses });
@@ -177,7 +191,6 @@ const deleteAddress = async (addressId) => {
         const response = await api.delete(`/auth/address/${addressId}`);
         const { data: addresses } = response.data;
 
-        // Update stored user with updated addresses
         const currentUser = getStoredUser();
         if (currentUser) {
             setAuthData(getToken(), { ...currentUser, addresses });
@@ -195,6 +208,7 @@ const deleteAddress = async (addressId) => {
 // Check if user is authenticated
 const isAuthenticated = () => {
     const token = getToken();
+    console.log('🔍 isAuthenticated check - token exists:', !!token);
     return !!token;
 };
 
@@ -215,7 +229,7 @@ const getCurrentUser = () => {
     return getStoredUser();
 };
 
-// Update user in storage (for cart, etc.)
+// Update user in storage
 const updateUser = (updates) => {
     const currentUser = getStoredUser();
     if (currentUser) {

@@ -9,7 +9,7 @@ const { sendOrderConfirmation, sendOrderStatusUpdate } = require('../utils/sendE
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
-const createOrder = async (req, res) => {
+const createOrder = async (req, res, next) => {
     try {
         const {
             items,
@@ -27,6 +27,7 @@ const createOrder = async (req, res) => {
         // Calculate order totals
         let subtotal = 0;
         let orderItems = [];
+        console.log('calculate order total');
 
         for (const item of items) {
             const service = await Service.findById(item.service);
@@ -50,6 +51,7 @@ const createOrder = async (req, res) => {
                 specialInstructions: item.specialInstructions || ''
             });
         }
+        console.log('calculate charges');
 
         // Calculate charges
         const gst = subtotal * 0.18;
@@ -81,6 +83,9 @@ const createOrder = async (req, res) => {
 
         const totalAmount = subtotal + gst + deliveryCharge + expressCharge - discount;
 
+
+        console.log('create order');
+
         // Create order
         const order = await Order.create({
             user: req.user._id,
@@ -108,6 +113,7 @@ const createOrder = async (req, res) => {
             orderStatus: 'pending',
             paymentStatus: paymentMethod === 'online' ? 'pending' : 'pending'
         });
+        console.log('after create order');
 
         // Update coupon with order ID
         if (appliedCoupon) {
@@ -124,11 +130,11 @@ const createOrder = async (req, res) => {
             updatedBy: req.user._id
         });
         await order.save();
-
+        console.log('send notification');
         // Send notifications
         sendOrderConfirmation(order, req.user).catch(console.error);
         sendOrderConfirmationSMS(req.user, order).catch(console.error);
-
+        console.log('after send notification');
         // Create notification in DB
         await Notification.create({
             user: req.user._id,

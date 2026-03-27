@@ -6,8 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 // Context Providers
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import { ServiceProvider } from './context/ServiceContext';  // ✅ ADD THIS
-import { OrderProvider } from './context/OrderContext';      // ✅ ADD THIS
+import { ServiceProvider } from './context/ServiceContext';
+import { OrderProvider } from './context/OrderContext';
 
 // Components
 import Navbar from './components/common/Navbar';
@@ -54,14 +54,17 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <ServiceProvider>          {/* ✅ WRAP WITH ServiceProvider */}
+        <ServiceProvider>
           <CartProvider>
-            <OrderProvider>        {/* ✅ WRAP WITH OrderProvider */}
+            <OrderProvider>
               <div className="min-h-screen flex flex-col bg-gray-50">
+                {/* Fixed Navbar */}
                 <Navbar />
-                <main className="flex-grow">
+
+                {/* Main Content - pt-20 adds padding top to avoid navbar overlap */}
+                <main className="flex-grow pt-20">
                   <Routes>
-                    {/* Public Routes */}
+                    {/* ============= PUBLIC ROUTES ============= */}
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
@@ -71,7 +74,7 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/faq" element={<FAQ />} />
 
-                    {/* Protected User Routes */}
+                    {/* ============= PROTECTED USER ROUTES ============= */}
                     <Route path="/cart" element={
                       <PrivateRoute>
                         <Cart />
@@ -108,7 +111,7 @@ function App() {
                       </PrivateRoute>
                     } />
 
-                    {/* Admin Routes */}
+                    {/* ============= ADMIN ROUTES ============= */}
                     <Route path="/admin" element={
                       <AdminRoute>
                         <AdminDashboard />
@@ -190,11 +193,15 @@ function App() {
                       </AdminRoute>
                     } />
 
-                    {/* 404 Page */}
+                    {/* ============= 404 PAGE ============= */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </main>
+
+                {/* Footer */}
                 <Footer />
+
+                {/* Toast Notifications */}
                 <ToastContainer
                   position="top-right"
                   autoClose={3000}

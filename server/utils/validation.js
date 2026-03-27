@@ -17,7 +17,6 @@ const validatePassword = (password) => {
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumbers = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
     const isValid = password.length >= minLength;
 
     return {

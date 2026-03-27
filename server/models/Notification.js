@@ -214,18 +214,16 @@ notificationSchema.statics.cleanupOldNotifications = async function (daysToKeep 
 };
 
 // Pre-save middleware to handle expiry
-notificationSchema.pre('save', function (next) {
-    // Set default expiry if not set (30 days from now)
+notificationSchema.pre('save', async function () {
     if (!this.expiresAt && this.type !== 'promotion') {
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 30);
         this.expiresAt = expiryDate;
     } else if (!this.expiresAt && this.type === 'promotion') {
         const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 7); // Promotions expire in 7 days
+        expiryDate.setDate(expiryDate.getDate() + 7);
         this.expiresAt = expiryDate;
     }
-    next();
 });
 
 const Notification = mongoose.model('Notification', notificationSchema);

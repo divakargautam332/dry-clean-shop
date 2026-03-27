@@ -35,8 +35,8 @@ const orderSchema = new mongoose.Schema(
     {
         orderNumber: {
             type: String,
-            required: true,
-            unique: true
+            unique: true,
+            sparse: true
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -52,7 +52,7 @@ const orderSchema = new mongoose.Schema(
         subtotal: {
             type: Number,
             required: true,
-            min: [0, 'Subtotal cannot be negative']
+            default: 0
         },
         gst: {
             type: Number,
@@ -76,7 +76,7 @@ const orderSchema = new mongoose.Schema(
         totalAmount: {
             type: Number,
             required: true,
-            min: [0, 'Total amount cannot be negative']
+            default: 0
         },
         paymentMethod: {
             type: String,
@@ -175,33 +175,52 @@ const orderSchema = new mongoose.Schema(
     }
 );
 
-orderSchema.pre('save', async function (next) {
+
+// ✅ Generate Order Number (NO next)
+orderSchema.pre('save', async function () {
     if (!this.orderNumber) {
         const date = new Date();
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+
         this.orderNumber = `DRY${year}${month}${day}${random}`;
+        console.log('✅ Order number generated:', this.orderNumber);
     }
-    next();
 });
 
-orderSchema.pre('save', function (next) {
+
+// ✅ Calculate Totals (NO next)
+orderSchema.pre('save', async function () {
     let itemsTotal = 0;
+
     this.items.forEach(item => {
         itemsTotal += item.totalPrice;
     });
+
     this.subtotal = itemsTotal;
     this.gst = this.subtotal * 0.18;
-    this.totalAmount = this.subtotal + this.gst + this.deliveryCharge + this.expressCharge - this.discount;
-    next();
+
+    this.totalAmount =
+        this.subtotal +
+        this.gst +
+        this.deliveryCharge +
+        this.expressCharge -
+        this.discount;
+
+    console.log('✅ Totals calculated');
 });
 
+
+// ✅ Virtual Field
 orderSchema.virtual('totalItems').get(function () {
     return this.items.reduce((total, item) => total + item.quantity, 0);
 });
+console.log('virtual function');
 
+
+// ✅ Model Export
 const Order = mongoose.model('Order', orderSchema);
 
 module.exports = Order;

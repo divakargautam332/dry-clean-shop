@@ -4,6 +4,14 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./config/db');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
+const authRoutes = require('./routes/authRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const userRoutes = require('./routes/userRoutes');
+const couponRoutes = require('./routes/couponRoutes');
+const deliveryRoutes = require('./routes/deliveryRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 // Load env vars
 dotenv.config();
@@ -34,14 +42,14 @@ app.use((req, res, next) => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/services', require('./routes/serviceRoutes'));
-app.use('/api/orders', require('./routes/orderRoutes'));
-app.use('/api/admin', require('./routes/adminRoutes'));
-app.use('/api/user', require('./routes/userRoutes'));
-app.use('/api/coupons', require('./routes/couponRoutes'));
-app.use('/api/delivery', require('./routes/deliveryRoutes'));
-app.use('/api/reviews', require('./routes/reviewRoutes'));
+app.use('/api/auth', authRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/delivery', deliveryRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {

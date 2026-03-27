@@ -7,31 +7,38 @@ const { validateRegistration, validateLogin } = require('../utils/validation');
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
 
         // Validate input
         const validation = validateRegistration(name, email, phone, password);
         if (!validation.isValid) {
-            res.status(400);
-            throw new Error(validation.errors.join(', '));
+            return res.status(400).json({
+                success: false,
+                message: validation.errors.join(', ')
+            });
         }
 
         // Check if user exists
         const userExists = await User.findOne({ email });
         if (userExists) {
-            res.status(400);
-            throw new Error('User already exists');
+            return res.status(400).json({
+                success: false,
+                message: 'User already exists'
+            });
         }
 
         // Check if phone already registered
         const phoneExists = await User.findOne({ phone });
         if (phoneExists) {
-            res.status(400);
-            throw new Error('Phone number already registered');
+            return res.status(400).json({
+                success: false,
+                message: 'Phone number already registered'
+            });
         }
 
+        console.log('📝 Creating user...');
         // Create user
         const user = await User.create({
             name,
@@ -40,6 +47,7 @@ const registerUser = async (req, res) => {
             phone,
             addresses: address ? [address] : []
         });
+        console.log('✅ User created successfully!');
 
         if (user) {
             // Send welcome email and SMS (don't await, let it run in background)
@@ -60,22 +68,42 @@ const registerUser = async (req, res) => {
                 }
             });
         } else {
-            res.status(400);
-            throw new Error('Invalid user data');
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid user data'
+            });
         }
     } catch (error) {
-        res.status(res.statusCode === 200 ? 500 : res.statusCode);
-        res.json({
+        console.error('❌ Register error:', error);
+
+        // Handle duplicate key error
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            return res.status(400).json({
+                success: false,
+                message: `${field} already exists`
+            });
+        }
+
+        // Handle validation error
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(err => err.message);
+            return res.status(400).json({
+                success: false,
+                message: messages.join(', ')
+            });
+        }
+
+        res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message || 'Registration failed'
         });
     }
 };
-
 // @desc    Login user
 // @route   POST /api/auth/login
 // @access  Public
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -127,7 +155,7 @@ const loginUser = async (req, res) => {
 // @desc    Get user profile
 // @route   GET /api/auth/profile
 // @access  Private
-const getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id).select('-password');
 
@@ -152,7 +180,7 @@ const getUserProfile = async (req, res) => {
 // @desc    Update user profile
 // @route   PUT /api/auth/profile
 // @access  Private
-const updateUserProfile = async (req, res) => {
+const updateUserProfile = async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id);
 
@@ -180,9 +208,9 @@ const updateUserProfile = async (req, res) => {
             if (req.body.password) {
                 user.password = req.body.password;
             }
-
+            console.log('this is save');
             const updatedUser = await user.save();
-
+            console.log('this is after save');
             res.json({
                 success: true,
                 data: {
