@@ -58,7 +58,22 @@ const serviceSchema = new mongoose.Schema(
         },
         tags: [{
             type: String,
-            enum: ['dry-clean', 'ironing', 'wash-fold', 'stain-removal', 'express']
+            enum: [
+                'dry-clean',
+                'ironing',
+                'wash-fold',
+                'stain-removal',
+                'express',
+                'delicate',
+                'wool-care',
+                'leather-care',
+                'home',
+                'wedding',
+                'jeans',
+                'winter',
+                'ethnic',
+                'other'
+            ]
         }],
         minOrderQuantity: {
             type: Number,

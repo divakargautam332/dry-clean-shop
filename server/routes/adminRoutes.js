@@ -11,7 +11,28 @@ const {
     approveReview,
     replyToReview,
     getSalesReport,
-    sendBulkNotification
+    sendBulkNotification,
+    getCoupons,
+    createCoupon,
+    updateCoupon,
+    deleteCoupon,
+    toggleCouponStatus,
+    getSettings,
+    updateSettings,
+    // ✅ Add these report functions
+    getOrdersReport,
+    getServicesReport,
+    getCustomersReport,
+    getRevenueReport,
+
+    getDeliveryStaff,
+    getDeliveryStaffById,
+    createDeliveryStaff,
+    updateDeliveryStaff,
+    deleteDeliveryStaff,
+    updateStaffAvailability,
+    assignOrderToStaff,
+    getStaffAssignedOrders
 } = require('../controllers/adminController');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
 
@@ -37,15 +58,33 @@ router.post('/reviews/:id/reply', replyToReview);
 
 // Reports
 router.get('/reports/sales', getSalesReport);
+router.get('/reports/orders', getOrdersReport);      // ✅ Add this
+router.get('/reports/services', getServicesReport);  // ✅ Add this
+router.get('/reports/customers', getCustomersReport); // ✅ Add this
+router.get('/reports/revenue', getRevenueReport);    // ✅ Add this
 
 // Notifications
 router.post('/notifications/send', sendBulkNotification);
 
-// ============= COUPON MANAGEMENT - COMMENTED FOR NOW =============
-// router.get('/coupons', getCoupons);
-// router.post('/coupons', createCoupon);
-// router.put('/coupons/:id', updateCoupon);
-// router.delete('/coupons/:id', deleteCoupon);
-// router.put('/coupons/:id/toggle', toggleCouponStatus);
+// Coupon Management
+router.get('/coupons', getCoupons);
+router.post('/coupons', createCoupon);
+router.put('/coupons/:id', updateCoupon);
+router.delete('/coupons/:id', deleteCoupon);
+router.put('/coupons/:id/toggle', toggleCouponStatus);
+
+// Settings
+router.get('/settings', getSettings);
+router.put('/settings', updateSettings);
+
+
+router.get('/delivery-staff', getDeliveryStaff);
+router.get('/delivery-staff/:id', getDeliveryStaffById);
+router.post('/delivery-staff', createDeliveryStaff);
+router.put('/delivery-staff/:id', updateDeliveryStaff);
+router.delete('/delivery-staff/:id', deleteDeliveryStaff);
+router.put('/delivery-staff/:id/availability', updateStaffAvailability);
+router.get('/delivery-staff/:id/orders', getStaffAssignedOrders);
+router.post('/delivery-staff/assign', assignOrderToStaff);
 
 module.exports = router;

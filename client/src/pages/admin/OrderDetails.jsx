@@ -62,6 +62,21 @@ const OrderDetails = () => {
         setUpdating(false);
     };
 
+    // ✅ Function to open Google Maps with address
+    const openGoogleMaps = (address) => {
+        if (!address) {
+            toast.error('Address not available');
+            return;
+        }
+
+        // Create full address string
+        const fullAddress = `${address.name}, ${address.address}, ${address.city}, ${address.state} - ${address.pincode}`;
+        const encodedAddress = encodeURIComponent(fullAddress);
+        const mapsUrl = `https://www.google.com/maps/search/${encodedAddress}`;
+
+        window.open(mapsUrl, '_blank');
+    };
+
     const getStatusColor = (status) => {
         const colors = {
             pending: 'bg-yellow-100 text-yellow-800',
@@ -205,10 +220,22 @@ const OrderDetails = () => {
                         </div>
                     </div>
 
-                    {/* Addresses */}
+                    {/* ✅ Addresses with Map Buttons */}
                     <div className="grid md:grid-cols-2 gap-6">
+                        {/* Pickup Address */}
                         <div className="bg-white rounded-lg shadow-md p-5">
-                            <h2 className="text-lg font-semibold text-gray-800 mb-4">Pickup Address</h2>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-lg font-semibold text-gray-800">Pickup Address</h2>
+                                <button
+                                    onClick={() => openGoogleMaps(order.pickupAddress)}
+                                    className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                    </svg>
+                                    Open in Maps
+                                </button>
+                            </div>
                             <div className="text-gray-600">
                                 <p className="font-medium">{order.pickupAddress?.name}</p>
                                 <p>{order.pickupAddress?.address}</p>
@@ -219,8 +246,21 @@ const OrderDetails = () => {
                                 )}
                             </div>
                         </div>
+
+                        {/* Delivery Address */}
                         <div className="bg-white rounded-lg shadow-md p-5">
-                            <h2 className="text-lg font-semibold text-gray-800 mb-4">Delivery Address</h2>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-lg font-semibold text-gray-800">Delivery Address</h2>
+                                <button
+                                    onClick={() => openGoogleMaps(order.deliveryAddress)}
+                                    className="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                    </svg>
+                                    Open in Maps
+                                </button>
+                            </div>
                             <div className="text-gray-600">
                                 <p className="font-medium">{order.deliveryAddress?.name}</p>
                                 <p>{order.deliveryAddress?.address}</p>
@@ -362,18 +402,18 @@ const OrderDetails = () => {
                 onConfirm={handleStatusUpdate}
                 title="Update Order Status"
                 message={
-                    <div className="space-y-3">
-                        <p>Select new status for this order:</p>
+                    <>
+                        <p className="text-gray-600 mb-3">Select new status for this order:</p>
                         <select
                             value={selectedStatus}
                             onChange={(e) => setSelectedStatus(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             {statusOptions.map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
-                    </div>
+                    </>
                 }
                 confirmText={updating ? 'Updating...' : 'Update'}
                 cancelText="Cancel"
@@ -388,18 +428,18 @@ const OrderDetails = () => {
                 onConfirm={handlePaymentUpdate}
                 title="Update Payment Status"
                 message={
-                    <div className="space-y-3">
-                        <p>Select new payment status:</p>
+                    <>
+                        <p className="text-gray-600 mb-3">Select new payment status:</p>
                         <select
                             value={selectedPaymentStatus}
                             onChange={(e) => setSelectedPaymentStatus(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             {paymentOptions.map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
-                    </div>
+                    </>
                 }
                 confirmText={updating ? 'Updating...' : 'Update'}
                 cancelText="Cancel"

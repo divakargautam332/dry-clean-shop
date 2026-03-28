@@ -81,7 +81,7 @@ const Footer = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                 </svg>
                             </div>
-                            <span className="text-xl font-bold">DryClean<span className="text-blue-500">Pro</span></span>
+                            <span className="text-xl font-bold">Deep <span className="text-blue-500">DryCleaners</span></span>
                         </div>
                         <p className="text-gray-400 text-sm mb-4">
                             Professional dry cleaning and laundry services at your doorstep. Quality care for your clothes.
@@ -202,7 +202,7 @@ const Footer = () => {
             <div className="border-t border-gray-800">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col md:flex-row justify-between items-center text-center text-gray-400 text-sm">
-                        <p>&copy; {currentYear} DryCleanPro. All rights reserved.</p>
+                        <p>&copy; {currentYear} Deep DryCleaners. All rights reserved.</p>
                         <div className="flex space-x-4 mt-2 md:mt-0">
                             {support.map((link) => (
                                 <Link key={link.path} to={link.path} className="hover:text-blue-500 transition-colors">

@@ -66,6 +66,27 @@ const useAdmin = () => {
         return result;
     };
 
+    // ✅ Add missing report functions
+    const getOrdersReport = async (params = {}) => {
+        const result = await adminService.getOrdersReport(params);
+        return result;
+    };
+
+    const getServicesReport = async (params = {}) => {
+        const result = await adminService.getServicesReport(params);
+        return result;
+    };
+
+    const getCustomersReport = async (params = {}) => {
+        const result = await adminService.getCustomersReport(params);
+        return result;
+    };
+
+    const getRevenueReport = async (params = {}) => {
+        const result = await adminService.getRevenueReport(params);
+        return result;
+    };
+
     const getCoupons = async () => {
         const result = await adminService.getCoupons();
         return result;
@@ -148,6 +169,10 @@ const useAdmin = () => {
         approveReview,
         replyToReview,
         getSalesReport,
+        getOrdersReport,        // ✅ Added
+        getServicesReport,      // ✅ Added
+        getCustomersReport,     // ✅ Added
+        getRevenueReport,       // ✅ Added
         getCoupons,
         createCoupon,
         deleteCoupon,

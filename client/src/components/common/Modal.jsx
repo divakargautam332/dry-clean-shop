@@ -137,7 +137,7 @@ const Modal = ({
     );
 };
 
-// Confirmation Modal
+// ✅ FIXED: Confirmation Modal - Changed <p> to <div> to allow nested elements
 export const ConfirmModal = ({
     isOpen,
     onClose,
@@ -181,7 +181,8 @@ export const ConfirmModal = ({
                 </div>
             }
         >
-            <p className="text-gray-600">{message}</p>
+            {/* ✅ FIXED: Use div instead of p to allow nested elements like select, div, etc. */}
+            <div className="text-gray-600">{message}</div>
         </Modal>
     );
 };
