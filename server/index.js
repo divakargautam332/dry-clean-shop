@@ -50,6 +50,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/delivery', deliveryRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/contact', require('./routes/contactRoutes'));
+app.use('/api/newsletter', require('./routes/newsletterRoutes'));
 
 // Health check route
 app.get('/api/health', (req, res) => {

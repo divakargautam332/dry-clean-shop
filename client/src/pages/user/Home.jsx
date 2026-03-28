@@ -7,83 +7,34 @@ import Loader from '../../components/common/Loader';
 import { toast } from 'react-toastify';
 
 const Home = () => {
-    const { popularServices, newServices, loading, getActualPrice, formatPrice } = useService();
+    const { popularServices, loading } = useService();
     const { addToCart } = useCart();
-    const [selectedService, setSelectedService] = useState(null);
+    const [reviews, setReviews] = useState([]);
+    const [stats, setStats] = useState(null);
+    const [reviewsLoading, setReviewsLoading] = useState(true);
 
-    const features = [
-        {
-            icon: '🚚',
-            title: 'Free Pickup & Delivery',
-            description: 'We pick up and deliver your laundry at your doorstep'
-        },
-        {
-            icon: '✨',
-            title: 'Premium Quality',
-            description: 'Expert care for all your garments with premium products'
-        },
-        {
-            icon: '⏱️',
-            title: 'Express Service',
-            description: 'Same day delivery available for urgent needs'
-        },
-        {
-            icon: '💰',
-            title: 'Best Price Guarantee',
-            description: 'Competitive pricing with no hidden charges'
-        }
-    ];
+    // Fetch all reviews from database
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                setReviewsLoading(true);
+                const response = await fetch('http://localhost:5000/api/reviews');
+                const data = await response.json();
 
-    const steps = [
-        {
-            number: '01',
-            title: 'Select Service',
-            description: 'Choose from our wide range of laundry services',
-            icon: '📱'
-        },
-        {
-            number: '02',
-            title: 'Schedule Pickup',
-            description: 'Select date and time for free pickup',
-            icon: '📅'
-        },
-        {
-            number: '03',
-            title: 'We Clean',
-            description: 'Professional cleaning with quality check',
-            icon: '🧺'
-        },
-        {
-            number: '04',
-            title: 'Get Delivered',
-            description: 'Fresh, clean clothes delivered to your door',
-            icon: '🏠'
-        }
-    ];
+                if (data.success) {
+                    setReviews(data.data);
+                    setStats(data.stats);
+                }
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                toast.error('Failed to load reviews');
+            } finally {
+                setReviewsLoading(false);
+            }
+        };
 
-    const testimonials = [
-        {
-            name: 'Rajesh Sharma',
-            location: 'Mumbai',
-            rating: 5,
-            comment: 'Excellent service! They picked up and delivered on time. Clothes were perfectly cleaned and pressed.',
-            image: 'https://randomuser.me/api/portraits/men/1.jpg'
-        },
-        {
-            name: 'Priya Patel',
-            location: 'Delhi',
-            rating: 5,
-            comment: 'Very professional service. My silk saree was handled with care. Highly recommended!',
-            image: 'https://randomuser.me/api/portraits/women/2.jpg'
-        },
-        {
-            name: 'Amit Kumar',
-            location: 'Bangalore',
-            rating: 4,
-            comment: 'Great service at reasonable prices. The app is easy to use and tracking is very helpful.',
-            image: 'https://randomuser.me/api/portraits/men/3.jpg'
-        }
-    ];
+        fetchReviews();
+    }, []);
 
     const renderStars = (rating) => {
         return (
@@ -102,6 +53,28 @@ const Home = () => {
         );
     };
 
+    const formatDate = (date) => {
+        return new Date(date).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
+    const features = [
+        { icon: '🚚', title: 'Free Pickup & Delivery', description: 'We pick up and deliver your laundry at your doorstep' },
+        { icon: '✨', title: 'Premium Quality', description: 'Expert care for all your garments with premium products' },
+        { icon: '⏱️', title: 'Express Service', description: 'Same day delivery available for urgent needs' },
+        { icon: '💰', title: 'Best Price Guarantee', description: 'Competitive pricing with no hidden charges' }
+    ];
+
+    const steps = [
+        { number: '01', title: 'Select Service', description: 'Choose from our wide range of laundry services', icon: '📱' },
+        { number: '02', title: 'Schedule Pickup', description: 'Select date and time for free pickup', icon: '📅' },
+        { number: '03', title: 'We Clean', description: 'Professional cleaning with quality check', icon: '🧺' },
+        { number: '04', title: 'Get Delivered', description: 'Fresh, clean clothes delivered to your door', icon: '🏠' }
+    ];
+
     return (
         <div>
             {/* Hero Section */}
@@ -117,26 +90,12 @@ const Home = () => {
                                 Free pickup and delivery, quality guaranteed.
                             </p>
                             <div className="flex flex-wrap gap-4">
-                                <Link
-                                    to="/services"
-                                    className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                                >
-                                    Book Now
-                                </Link>
-                                <Link
-                                    to="/track-order"
-                                    className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-                                >
-                                    Track Order
-                                </Link>
+                                <Link to="/services" className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Book Now</Link>
+                                <Link to="/track-order" className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">Track Order</Link>
                             </div>
                         </div>
                         <div className="hidden md:block">
-                            <img
-                                src="https://images.unsplash.com/photo-1545173168-9f1947eebb7f?w=500&h=400&fit=crop"
-                                alt="Laundry Service"
-                                className="rounded-lg shadow-xl"
-                            />
+                            <img src="https://images.unsplash.com/photo-1545173168-9f1947eebb7f?w=500&h=400&fit=crop" alt="Laundry Service" className="rounded-lg shadow-xl" />
                         </div>
                     </div>
                 </div>
@@ -169,14 +128,10 @@ const Home = () => {
                             <h2 className="text-3xl font-bold text-gray-800 mb-2">Popular Services</h2>
                             <p className="text-gray-600">Most loved by our customers</p>
                         </div>
-                        <Link to="/services" className="text-blue-600 hover:text-blue-700 font-medium">
-                            View All →
-                        </Link>
+                        <Link to="/services" className="text-blue-600 hover:text-blue-700 font-medium">View All →</Link>
                     </div>
                     {loading ? (
-                        <div className="flex justify-center py-12">
-                            <Loader size="lg" />
-                        </div>
+                        <div className="flex justify-center py-12"><Loader size="lg" /></div>
                     ) : (
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {popularServices.slice(0, 4).map((service) => (
@@ -187,8 +142,99 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* How It Works Section */}
+            {/* ============= REVIEWS SECTION - SAARE REVIEWS PRINT HONGE ============= */}
             <section className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold text-gray-800 mb-2">What Our Customers Say</h2>
+                        <p className="text-gray-600">Real reviews from real customers</p>
+
+                        {/* Rating Stats */}
+                        {stats && stats.totalReviews > 0 && (
+                            <div className="mt-4 flex items-center justify-center space-x-6">
+                                <div className="text-center">
+                                    <div className="text-5xl font-bold text-yellow-500">{stats.averageRating}</div>
+                                    <div className="flex justify-center mt-1">{renderStars(Math.round(stats.averageRating))}</div>
+                                    <p className="text-sm text-gray-500 mt-1">Average Rating</p>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-5xl font-bold text-blue-600">{stats.totalReviews}</div>
+                                    <p className="text-sm text-gray-500 mt-2">Total Reviews</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* ALL REVIEWS PRINT - Saare reviews yahan print honge */}
+                    {reviewsLoading ? (
+                        <div className="flex justify-center py-12"><Loader size="lg" /></div>
+                    ) : reviews.length > 0 ? (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {reviews.map((review) => (
+                                <div key={review._id} className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                                    {/* User Info */}
+                                    <div className="flex items-center mb-4">
+                                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-lg">
+                                            {review.user?.name?.charAt(0).toUpperCase() || 'U'}
+                                        </div>
+                                        <div className="ml-3">
+                                            <h4 className="font-semibold text-gray-800">{review.user?.name || 'User'}</h4>
+                                            <p className="text-xs text-gray-500">{formatDate(review.createdAt)}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Rating Stars */}
+                                    <div className="mb-3">{renderStars(review.rating)}</div>
+
+                                    {/* Review Title */}
+                                    {review.title && (
+                                        <h3 className="font-semibold text-gray-800 mb-2">{review.title}</h3>
+                                    )}
+
+                                    {/* Review Comment */}
+                                    <p className="text-gray-600 text-sm italic">"{review.comment}"</p>
+
+                                    {/* Pros & Cons */}
+                                    {(review.pros || review.cons) && (
+                                        <div className="mt-3 pt-3 border-t border-gray-100">
+                                            {review.pros && (
+                                                <p className="text-xs text-green-600">
+                                                    <span className="font-semibold">👍 Pros:</span> {review.pros}
+                                                </p>
+                                            )}
+                                            {review.cons && (
+                                                <p className="text-xs text-red-500 mt-1">
+                                                    <span className="font-semibold">👎 Cons:</span> {review.cons}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Verified Badge */}
+                                    {review.isVerified && (
+                                        <div className="mt-3">
+                                            <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">✓ Verified Purchase</span>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+                            <svg className="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
+                            <p className="text-gray-500 mb-3">No reviews yet</p>
+                            <Link to="/my-orders" className="text-blue-600 hover:text-blue-700">
+                                Be the first to write a review →
+                            </Link>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            {/* How It Works Section */}
+            <section className="py-16">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl font-bold text-gray-800 mb-2">How It Works</h2>
@@ -216,44 +262,12 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Testimonials Section */}
-            <section className="py-16">
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-gray-800 mb-2">What Our Customers Say</h2>
-                        <p className="text-gray-600">Trusted by thousands of happy customers</p>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {testimonials.map((testimonial, index) => (
-                            <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-                                <div className="flex items-center mb-4">
-                                    <img
-                                        src={testimonial.image}
-                                        alt={testimonial.name}
-                                        className="w-12 h-12 rounded-full object-cover mr-3"
-                                    />
-                                    <div>
-                                        <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
-                                        <p className="text-xs text-gray-500">{testimonial.location}</p>
-                                    </div>
-                                </div>
-                                <div className="mb-3">{renderStars(testimonial.rating)}</div>
-                                <p className="text-gray-600 text-sm italic">"{testimonial.comment}"</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
             {/* CTA Section */}
             <section className="bg-blue-600 py-16">
                 <div className="container mx-auto px-4 text-center">
                     <h2 className="text-3xl font-bold text-white mb-4">Ready to experience the best laundry service?</h2>
                     <p className="text-blue-100 mb-6">Get your first order and enjoy special discounts!</p>
-                    <Link
-                        to="/services"
-                        className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                    >
+                    <Link to="/services" className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                         Book Your First Order
                     </Link>
                 </div>

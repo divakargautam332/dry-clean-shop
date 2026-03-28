@@ -3,11 +3,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
+
+
 // Context Providers
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ServiceProvider } from './context/ServiceContext';
 import { OrderProvider } from './context/OrderContext';
+// import { ReviewProvider } from './context/ReviewContext';
 
 // Components
 import Navbar from './components/common/Navbar';
@@ -22,6 +26,7 @@ import Register from './pages/user/Register';
 import Services from './pages/user/Services';
 import ServiceDetail from './pages/user/ServiceDetail';
 import Cart from './pages/user/Cart';
+import WriteReview from './pages/user/WriteReview';
 import Checkout from './pages/user/Checkout';
 import TrackOrder from './pages/user/TrackOrder';
 import Dashboard from './pages/user/Dashboard';
@@ -31,6 +36,11 @@ import Profile from './pages/user/Profile';
 import AddressBook from './pages/user/AddressBook';
 import Contact from './pages/user/Contact';
 import FAQ from './pages/user/FAQ';
+import PrivacyPolicy from './pages/user/PrivacyPolicy';
+import TermsConditions from './pages/user/TermsConditions';
+import RefundPolicy from './pages/user/RefundPolicy';
+import ShippingPolicy from './pages/user/ShippingPolicy';
+import CancellationPolicy from './pages/user/CancellationPolicy';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -70,7 +80,11 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/services/:id" element={<ServiceDetail />} />
+
+                    {/* ✅ FIXED: Track Order Routes - Both versions */}
+                    <Route path="/track-order" element={<TrackOrder />} />
                     <Route path="/track-order/:orderNumber" element={<TrackOrder />} />
+
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/faq" element={<FAQ />} />
 
@@ -108,6 +122,11 @@ function App() {
                     <Route path="/address-book" element={
                       <PrivateRoute>
                         <AddressBook />
+                      </PrivateRoute>
+                    } />
+                    <Route path="/orders/:orderId/review" element={
+                      <PrivateRoute>
+                        <WriteReview />
                       </PrivateRoute>
                     } />
 
@@ -192,6 +211,14 @@ function App() {
                         <AdminProfile />
                       </AdminRoute>
                     } />
+
+
+                    {/* Policy Pages */}
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms" element={<TermsConditions />} />
+                    <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                    <Route path="/cancellation-policy" element={<CancellationPolicy />} />
 
                     {/* ============= 404 PAGE ============= */}
                     <Route path="*" element={<Navigate to="/" replace />} />

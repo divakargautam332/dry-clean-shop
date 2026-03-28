@@ -41,4 +41,11 @@ router.get('/reports/sales', getSalesReport);
 // Notifications
 router.post('/notifications/send', sendBulkNotification);
 
+// ============= COUPON MANAGEMENT - COMMENTED FOR NOW =============
+// router.get('/coupons', getCoupons);
+// router.post('/coupons', createCoupon);
+// router.put('/coupons/:id', updateCoupon);
+// router.delete('/coupons/:id', deleteCoupon);
+// router.put('/coupons/:id/toggle', toggleCouponStatus);
+
 module.exports = router;

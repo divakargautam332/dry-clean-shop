@@ -35,36 +35,57 @@ const Contact = () => {
         if (!validateForm()) return;
 
         setLoading(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        toast.success('Message sent successfully! We will get back to you soon.');
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-        setLoading(false);
+        try {
+            const response = await fetch('http://localhost:5000/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                toast.success('Message sent successfully! We will get back to you soon.');
+                setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+            } else {
+                toast.error(data.message || 'Failed to send message');
+            }
+        } catch (error) {
+            console.error('Contact error:', error);
+            toast.error('Failed to send message. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const contactInfo = [
         {
             icon: '📞',
             title: 'Phone',
-            details: ['+91 98765 43210', '+91 98765 43211'],
-            action: 'Call Now'
+            details: ['+91 99584 83887', '+91 82873 77620'],
+            action: 'Call Now',
+            link: 'tel:+919958483887'
         },
         {
             icon: '✉️',
             title: 'Email',
-            details: ['support@drycleanpro.com', 'careers@drycleanpro.com'],
-            action: 'Send Email'
+            details: ['dipanshuk565@gmail.com', 'divakargautam7900@gmail.com'],
+            action: 'Send Email',
+            link: 'mailto:dipanshuk565@gmail.com?subject=Inquiry%20from%20Website&body=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services...'
         },
         {
             icon: '📍',
             title: 'Address',
-            details: ['123 Business Street, Andheri East', 'Mumbai, Maharashtra 400001'],
-            action: 'Get Directions'
+            details: ['E-80/524, Block E, Jhilmil Colony, Delhi, 110095'],
+            action: 'Get Directions',
+            link: 'https://www.google.com/maps/place/Deep+DryCleaners/@28.6687428,77.3080162,17z/data=!3m1!4b1!4m6!3m5!1s0x390cfb9bcb2ce397:0x2fca2385f87f14b5!8m2!3d28.6687428!4d77.3080162!16s%2Fg%2F11n00nnzsf!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDMyMy4xIKXMDSoASAFQAw%3D%3D'
         },
         {
             icon: '⏰',
             title: 'Business Hours',
-            details: ['Monday - Saturday: 8:00 AM - 8:00 PM', 'Sunday: 9:00 AM - 5:00 PM'],
+            details: ['Monday - Sunday: 10:00 AM - 9:30 PM'],
             action: ''
         }
     ];
@@ -107,9 +128,12 @@ const Contact = () => {
                                     <p key={i} className="text-gray-600 text-sm mb-1">{detail}</p>
                                 ))}
                                 {info.action && (
-                                    <button className="mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                    <a
+                                        href={info.link}
+                                        className="inline-block mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                                    >
                                         {info.action} →
-                                    </button>
+                                    </a>
                                 )}
                             </div>
                         ))}
