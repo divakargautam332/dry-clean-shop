@@ -18,7 +18,7 @@ const Home = () => {
         const fetchReviews = async () => {
             try {
                 setReviewsLoading(true);
-                const response = await fetch('http://localhost:5000/api/reviews');
+                const response = await fetch('https://dry-clean-shop-1.onrender.com/api/reviews');
                 const data = await response.json();
 
                 if (data.success) {
