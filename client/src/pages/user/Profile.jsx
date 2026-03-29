@@ -143,8 +143,8 @@ const Profile = () => {
                                 <button
                                     onClick={() => setActiveTab('profile')}
                                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === 'profile'
-                                            ? 'bg-blue-50 text-blue-600'
-                                            : 'text-gray-600 hover:bg-gray-50'
+                                        ? 'bg-blue-50 text-blue-600'
+                                        : 'text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     Profile Information
@@ -152,21 +152,21 @@ const Profile = () => {
                                 <button
                                     onClick={() => setActiveTab('password')}
                                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === 'password'
-                                            ? 'bg-blue-50 text-blue-600'
-                                            : 'text-gray-600 hover:bg-gray-50'
+                                        ? 'bg-blue-50 text-blue-600'
+                                        : 'text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     Change Password
                                 </button>
-                                <button
+                                {/* <button
                                     onClick={() => setActiveTab('loyalty')}
                                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === 'loyalty'
-                                            ? 'bg-blue-50 text-blue-600'
-                                            : 'text-gray-600 hover:bg-gray-50'
+                                        ? 'bg-blue-50 text-blue-600'
+                                        : 'text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     Loyalty Points
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
@@ -273,8 +273,8 @@ const Profile = () => {
                                         <span className="text-4xl">⭐</span>
                                         <span className="text-sm opacity-90">Rewards Program</span>
                                     </div>
-                                    <p className="text-3xl font-bold mb-2">{loyaltyPoints}</p>
-                                    <p className="text-sm opacity-90 mb-3">Total Loyalty Points</p>
+                                    {/* <p className="text-3xl font-bold mb-2">{loyaltyPoints}</p> */}
+                                    {/* <p className="text-sm opacity-90 mb-3">Total Loyalty Points</p> */}
                                     <div className="w-full bg-white/30 rounded-full h-2 mb-3">
                                         <div
                                             className="bg-white rounded-full h-2 transition-all"

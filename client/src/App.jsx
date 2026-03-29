@@ -1,10 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';  // ✅ Remove Router import
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
-
 
 // Context Providers
 import { AuthProvider } from './context/AuthContext';
@@ -19,7 +16,6 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import PrivateRoute from './routes/PrivateRoute';
 import AdminRoute from './routes/AdminRoute';
-
 
 // User Pages
 import Home from './pages/user/Home';
@@ -64,13 +60,13 @@ import AdminProfile from './pages/admin/Profile';
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>  {/* ✅ Only BrowserRouter - NO Router */}
       <ThemeProvider>
         <AuthProvider>
           <ServiceProvider>
             <CartProvider>
               <OrderProvider>
-                <div className="min-h-screen flex flex-col bg-gray-50">
+                <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
                   {/* Fixed Navbar */}
                   <Navbar />
 
@@ -84,7 +80,7 @@ function App() {
                       <Route path="/services" element={<Services />} />
                       <Route path="/services/:id" element={<ServiceDetail />} />
 
-                      {/* ✅ FIXED: Track Order Routes - Both versions */}
+                      {/* Track Order Routes - Both versions */}
                       <Route path="/track-order" element={<TrackOrder />} />
                       <Route path="/track-order/:orderNumber" element={<TrackOrder />} />
 
@@ -215,7 +211,6 @@ function App() {
                         </AdminRoute>
                       } />
 
-
                       {/* Policy Pages */}
                       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                       <Route path="/terms" element={<TermsConditions />} />
@@ -250,7 +245,7 @@ function App() {
           </ServiceProvider>
         </AuthProvider>
       </ThemeProvider>
-    </Router>
+    </BrowserRouter>
   );
 }
 
