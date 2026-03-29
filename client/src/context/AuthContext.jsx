@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
         authService.logout();
         setUser(null);
         setIsAuthenticated(false);
-        toast.info('You have been logged out.');
+        // toast.info('You have been logged out.');
     };
 
     const updateProfile = async (userData) => {

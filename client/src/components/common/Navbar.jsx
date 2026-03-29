@@ -48,7 +48,8 @@ const Navbar = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/');
+        // ✅ Use window.location for production to avoid routing issues
+        window.location.href = '/login';
         setIsMobileMenuOpen(false);
     };
 
