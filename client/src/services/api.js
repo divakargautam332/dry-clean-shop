@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Create axios instance with base URL
-const API_URL = 'http://localhost:5000/api';
+// ✅ Change this line for production
+const API_URL = 'https://dry-clean-shop-1.onrender.com/api';
 
 const api = axios.create({
     baseURL: API_URL,
