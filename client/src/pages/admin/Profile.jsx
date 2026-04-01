@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';  // ✅ Add this
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
@@ -121,34 +121,34 @@ const Profile = () => {
     const pointsValue = Math.floor(loyaltyPoints * 0.5);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+        <div className="min-h-screen bg-gray-50 py-8">
             <div className="container mx-auto px-4 max-w-4xl">
                 <div className="mb-6">
-                    <Link to="/dashboard" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 mb-4 inline-block">
+                    <Link to="/dashboard" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
                         ← Back to Dashboard
                     </Link>
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">My Profile</h1>
-                    <p className="text-gray-600 dark:text-gray-400">Manage your account information</p>
+                    <h1 className="text-2xl font-bold text-gray-800 mb-2">My Profile</h1>
+                    <p className="text-gray-600">Manage your account information</p>
                 </div>
 
                 <div className="grid md:grid-cols-4 gap-6">
                     {/* Sidebar */}
                     <div className="md:col-span-1">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                        <div className="bg-white rounded-lg shadow-md p-4">
                             <div className="text-center mb-4">
                                 <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
                                     {user?.name?.charAt(0).toUpperCase()}
                                 </div>
-                                <h3 className="font-semibold text-gray-800 dark:text-white">{user?.name}</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</p>
+                                <h3 className="font-semibold text-gray-800">{user?.name}</h3>
+                                <p className="text-sm text-gray-500">{user?.email}</p>
                             </div>
 
-                            <div className="border-t border-gray-100 dark:border-gray-700 pt-4">
+                            <div className="border-t border-gray-100 pt-4">
                                 <button
                                     onClick={() => setActiveTab('profile')}
                                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === 'profile'
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                            ? 'bg-blue-50 text-blue-600'
+                                            : 'text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     Profile Information
@@ -156,8 +156,8 @@ const Profile = () => {
                                 <button
                                     onClick={() => setActiveTab('password')}
                                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === 'password'
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                            ? 'bg-blue-50 text-blue-600'
+                                            : 'text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     Change Password
@@ -165,8 +165,8 @@ const Profile = () => {
                                 <button
                                     onClick={() => setActiveTab('loyalty')}
                                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === 'loyalty'
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                            ? 'bg-blue-50 text-blue-600'
+                                            : 'text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     Loyalty Points
@@ -179,8 +179,8 @@ const Profile = () => {
                     <div className="md:col-span-3">
                         {/* Profile Information */}
                         {activeTab === 'profile' && (
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Profile Information</h2>
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-lg font-semibold text-gray-800 mb-4">Profile Information</h2>
                                 <form onSubmit={handleProfileUpdate} className="space-y-4">
                                     <Input
                                         label="Full Name"
@@ -209,11 +209,7 @@ const Profile = () => {
                                         required
                                     />
                                     <div className="flex justify-end">
-                                        <Button
-                                            type="submit"
-                                            variant="primary"
-                                            loading={loading}
-                                        >
+                                        <Button type="submit" variant="primary" loading={loading}>
                                             Update Profile
                                         </Button>
                                     </div>
@@ -223,8 +219,8 @@ const Profile = () => {
 
                         {/* Change Password */}
                         {activeTab === 'password' && (
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Change Password</h2>
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-lg font-semibold text-gray-800 mb-4">Change Password</h2>
                                 <form onSubmit={handlePasswordChange} className="space-y-4">
                                     <Input
                                         label="Current Password"
@@ -255,11 +251,7 @@ const Profile = () => {
                                         required
                                     />
                                     <div className="flex justify-end">
-                                        <Button
-                                            type="submit"
-                                            variant="primary"
-                                            loading={loading}
-                                        >
+                                        <Button type="submit" variant="primary" loading={loading}>
                                             Change Password
                                         </Button>
                                     </div>
@@ -269,8 +261,8 @@ const Profile = () => {
 
                         {/* Loyalty Points */}
                         {activeTab === 'loyalty' && (
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Loyalty Points</h2>
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-lg font-semibold text-gray-800 mb-4">Loyalty Points</h2>
 
                                 <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-6 text-white mb-6">
                                     <div className="flex items-center justify-between mb-4">
@@ -291,19 +283,19 @@ const Profile = () => {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4 mb-6">
-                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
-                                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{pointsValue}</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">Reward Value (₹)</p>
+                                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                                        <p className="text-2xl font-bold text-blue-600">{pointsValue}</p>
+                                        <p className="text-xs text-gray-500">Reward Value (₹)</p>
                                     </div>
-                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
-                                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{Math.floor(loyaltyPoints / 100)}</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">Available Rewards</p>
+                                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                                        <p className="text-2xl font-bold text-blue-600">{Math.floor(loyaltyPoints / 100)}</p>
+                                        <p className="text-xs text-gray-500">Available Rewards</p>
                                     </div>
                                 </div>
 
-                                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                                    <h3 className="font-semibold text-gray-800 dark:text-white mb-2">How to Earn Points?</h3>
-                                    <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <h3 className="font-semibold text-gray-800 mb-2">How to Earn Points?</h3>
+                                    <ul className="space-y-2 text-sm text-gray-600">
                                         <li>✓ Earn 1 point for every ₹100 spent</li>
                                         <li>✓ 100 points = ₹50 discount on next order</li>
                                         <li>✓ Bonus points on special occasions</li>
